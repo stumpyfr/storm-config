@@ -1,5 +1,7 @@
-## storm-config ##
+# storm-config #
+Currently under development
 
+## description ##
 Just a helper to load your storm's topology and configuration from a json file
 
 It currently provides TopologyLoader to help you to load your topology from a json file who describes everything.
@@ -56,7 +58,7 @@ conf.setNumWorkers(8);
 StormSubmitter.submitTopology(topologyName, conf, builder.createTopology());
 ```
 
-## Usage ##
+# Usage #
 
 To produce a jar:
 
