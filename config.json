@@ -1,0 +1,40 @@
+{
+	"name": "test",
+	"spouts": [
+		{
+			"id" : "SpoutMQ",
+			"class": "com.tekforge.StormSample.Spouts.SpoutMQ",
+			"task": 2
+		}
+	],
+	"bolts": [
+		{
+			"id" : "Check",
+			"class": "com.tekforge.StormSample.Bolts.CheckBolt",
+			"task": 3,
+			"shuffleGrouping" : [
+				{
+					"id": "SpoutMQ"
+				}
+			]
+		},
+		{
+			"id" : "Test",
+			"class": "com.tekforge.StormSample.Bolts.TestBolt",
+			"task": 3,
+			"fieldsGrouping" : [
+				{
+					"id": "Check",
+					"fields": [
+						{
+							"value" : "value1"
+						},
+						{
+							"value" : "value2"
+						}
+					]
+				}
+			]
+		}
+	]
+}
