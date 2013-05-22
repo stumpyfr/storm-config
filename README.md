@@ -57,6 +57,10 @@ Config conf = new Config();
 conf.setNumWorkers(8);
 StormSubmitter.submitTopology(topologyName, conf, builder.createTopology());
 ```
+Start your topology:
+```
+./storm-0.8.2/bin/storm jar MyProject.jar com.tekforge.StormSample.App config.json
+```
 
 # Usage #
 
