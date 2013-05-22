@@ -49,12 +49,11 @@ It allows you to manage your topology and your parallelism configuration for eac
 ```
 
 ```java
-TopologyBuilder builder = TopologyLoader.Build(args[0]);
+TopologyBuilder builder = TopologyLoader.Build(args[0]); // example "conf.json"
 String topologyName = TopologyLoader.GetName();
 Config conf = new Config();
 conf.setNumWorkers(8);
-StormSubmitter.submitTopology(topologyName, conf,
-						builder.createTopology());
+StormSubmitter.submitTopology(topologyName, conf, builder.createTopology());
 ```
 
 ## Usage ##
