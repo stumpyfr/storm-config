@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Storm-config by stumpyfr</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Storm-config</h1>
+        <h2>Just a helper to load your storm's topology and configuration from a json file</h2>
+        <a href="https://github.com/stumpyfr/storm-config" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="storm-config" class="anchor" href="#storm-config"><span class="octicon octicon-link"></span></a>storm-config</h1>
+
+<p>Currently under development</p>
+
+<h2>
+<a name="description" class="anchor" href="#description"><span class="octicon octicon-link"></span></a>description</h2>
+
+<p>Just a helper to load your storm's topology and configuration from a json file</p>
+
+<p>It currently provides TopologyLoader to help you to load your topology from a json file who describes everything.
+It allows you to manage your topology and your parallelism configuration for each spout/bolt.</p>
+
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">"name"</span><span class="o">:</span> <span class="s2">"test"</span><span class="p">,</span>
+    <span class="s2">"spouts"</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">"id"</span> <span class="o">:</span> <span class="s2">"SpoutMQ"</span><span class="p">,</span>
+            <span class="s2">"class"</span><span class="o">:</span> <span class="s2">"com.tekforge.StormSample.Spouts.SpoutMQ"</span><span class="p">,</span>
+            <span class="s2">"task"</span><span class="o">:</span> <span class="mi">2</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s2">"bolts"</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">"id"</span> <span class="o">:</span> <span class="s2">"Check"</span><span class="p">,</span>
+            <span class="s2">"class"</span><span class="o">:</span> <span class="s2">"com.tekforge.StormSample.Bolts.CheckBolt"</span><span class="p">,</span>
+            <span class="s2">"task"</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="s2">"shuffleGrouping"</span> <span class="o">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">"id"</span><span class="o">:</span> <span class="s2">"SpoutMQ"</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">"id"</span> <span class="o">:</span> <span class="s2">"Test"</span><span class="p">,</span>
+            <span class="s2">"class"</span><span class="o">:</span> <span class="s2">"com.tekforge.StormSample.Bolts.TestBolt"</span><span class="p">,</span>
+            <span class="s2">"task"</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="s2">"fieldsGrouping"</span> <span class="o">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">"id"</span><span class="o">:</span> <span class="s2">"Check"</span><span class="p">,</span>
+                    <span class="s2">"fields"</span><span class="o">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">"value"</span> <span class="o">:</span> <span class="s2">"value1"</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="s2">"value"</span> <span class="o">:</span> <span class="s2">"value2"</span>
+                        <span class="p">}</span>
+                    <span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="n">TopologyBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="n">TopologyLoader</span><span class="o">.</span><span class="na">Build</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span> <span class="c1">// example "conf.json"</span>
+<span class="n">String</span> <span class="n">topologyName</span> <span class="o">=</span> <span class="n">TopologyLoader</span><span class="o">.</span><span class="na">GetName</span><span class="o">();</span>
+<span class="n">Config</span> <span class="n">conf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Config</span><span class="o">();</span>
+<span class="n">conf</span><span class="o">.</span><span class="na">setNumWorkers</span><span class="o">(</span><span class="mi">8</span><span class="o">);</span>
+<span class="n">StormSubmitter</span><span class="o">.</span><span class="na">submitTopology</span><span class="o">(</span><span class="n">topologyName</span><span class="o">,</span> <span class="n">conf</span><span class="o">,</span> <span class="n">builder</span><span class="o">.</span><span class="na">createTopology</span><span class="o">());</span>
+</pre></div>
+
+<p>Start your topology:</p>
+
+<pre><code>./storm-0.8.2/bin/storm jar MyProject.jar com.tekforge.StormSample.App config.json
+</code></pre>
+
+<h1>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h1>
+
+<p>To produce a jar:</p>
+
+<pre><code>$ mvn package
+</code></pre>
+
+<p>To install in your local Maven repository:</p>
+
+<pre><code>$ mvn install
+</code></pre>
+
+<p>To use in your <code>pom.xml</code>:</p>
+
+<div class="highlight"><pre><span class="nt">&lt;project&gt;</span>
+  <span class="c">&lt;!-- ... --&gt;</span>
+  <span class="nt">&lt;dependencies&gt;</span>
+    <span class="c">&lt;!-- ... --&gt;</span>
+    <span class="nt">&lt;dependency&gt;</span>
+      <span class="nt">&lt;groupId&gt;</span>com.tekforge<span class="nt">&lt;/groupId&gt;</span>
+      <span class="nt">&lt;artifactId&gt;</span>storm-config<span class="nt">&lt;/artifactId&gt;</span>
+      <span class="nt">&lt;version&gt;</span>0.0.1<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+    <span class="c">&lt;!-- ... --&gt;</span>
+  <span class="nt">&lt;/dependencies&gt;</span>
+  <span class="c">&lt;!-- ... --&gt;</span>
+<span class="nt">&lt;/project&gt;</span>
+</pre></div>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/stumpyfr/storm-config/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/stumpyfr/storm-config/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/stumpyfr/storm-config"></a> is maintained by <a href="https://github.com/stumpyfr">stumpyfr</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
