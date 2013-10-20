@@ -90,3 +90,7 @@ To use in your `pom.xml`:
 </project>
 ```
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/stumpyfr/storm-config/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
